@@ -7,8 +7,16 @@ import Login from "../login/login";
 import Favorites from "../favorites/favorites";
 import Property from "../property/property";
 import PrivateRoute from "../private-route/private-route";
+import { useAppSelector } from "../../hooks";
+import LoadingScreen from "../../pages/loading-screen";
 
 function App(): JSX.Element {
+  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
+  const isOffersDataLoading = useAppSelector((state) => state.isOffersDataLoading);
+
+  if (authorizationStatus === AuthorizationStatus.Unknow || isOffersDataLoading) {
+    return <LoadingScreen />
+  }
 
   return <React.Fragment>
     <BrowserRouter>
@@ -18,7 +26,7 @@ function App(): JSX.Element {
         <Route path={AppRoute.SignIn} element={<Login />} />
 
         <Route path={AppRoute.Favorites} element={
-          <PrivateRoute authorizationStatus={AuthorizationStatus.Auth}>
+          <PrivateRoute authorizationStatus={authorizationStatus}>
             <Favorites />
           </PrivateRoute>
         } />
@@ -28,7 +36,7 @@ function App(): JSX.Element {
         <Route path='*' element={<ErrorRoute />} />
       </Routes>
     </BrowserRouter>
-    
+
   </React.Fragment>
 }
 

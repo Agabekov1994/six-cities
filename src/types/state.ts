@@ -49,7 +49,8 @@ export type InitState = {
   },
   offers: Offer[],
   authorizationStatus: AuthorizationStatus,
-  error: string | null
+  error: string | null,
+  isOffersDataLoading: boolean,
 }
 
 export type State = ReturnType<typeof store.getState>;

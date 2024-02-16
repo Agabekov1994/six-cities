@@ -1,6 +1,6 @@
 import { InitState, State } from "../types/state";
 import { createReducer } from "@reduxjs/toolkit";
-import { loadOffers, requireAuthorization, setActiveCard, setCity, setError, setFavoriteCard, sortOffers } from "./action";
+import { loadOffers, requireAuthorization, setActiveCard, setCity, setError, setFavoriteCard, setOffersDataLoadingStatus, sortOffers } from "./action";
 import { AuthorizationStatus } from "../components/const";
 
 // const initialState: InitState = {
@@ -208,7 +208,8 @@ const initialState: InitState = {
   },
   offers: [],
   authorizationStatus: AuthorizationStatus.Unknow,
-  error: null
+  error: null,
+  isOffersDataLoading: false,
 }
 
 const getIndexFromMockArray = (state: State, id: number): number => state.offers.findIndex((offer) => offer.id === id);
@@ -235,6 +236,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setError, (state, action) => {
       state.error = action.payload;
+    })
+    .addCase(setOffersDataLoadingStatus, (state, action) => {
+      state.isOffersDataLoading = action.payload;
     })
 })
 
