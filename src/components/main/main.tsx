@@ -16,9 +16,9 @@ function Main() {
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    dispatch(setCity({city: city.name}));
-  }, []);
+  // useEffect(() => {
+  //   dispatch(setCity({ city: city.name }));
+  // }, []);
 
   return <React.Fragment>
     <div style={{ display: "none" }}>
@@ -32,7 +32,7 @@ function Main() {
         <h1 className="visually-hidden">Cities</h1>
 
         <Filter />
-        
+
         <div className="cities">
           <div className="cities__places-container container">
             <section className="cities__places places">
@@ -41,13 +41,13 @@ function Main() {
               <SortBlock />
               <div className="cities__places-list places__list tabs__content">
 
-                {filteredOffers.map((offer, index) => <CardOffer key={index+offer.title} offer={offer} id={offer.id} />)}
+                {filteredOffers.map((offer, index) => <CardOffer key={index + offer.title} offer={offer} id={offer.id} />)}
 
               </div>
             </section>
             <div className="cities__right-section">
               <section className="cities__map map">
-                <Map key={city.name} city={city} points={filteredOffers} selectedPoint={filteredOffers.filter((offer) => offer.is_active === true)[0]} />
+                <Map key={city.name} city={city} points={filteredOffers} selectedPoint={filteredOffers.filter((offer) => offer?.is_active === true)[0]} />
               </section>
             </div>
           </div>

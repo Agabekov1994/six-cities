@@ -111,7 +111,7 @@ function Map(props: MapProps) {
     const map = useMap(mapRef, city);
 
     useEffect(() => {
-        if(map) {
+        if (map) {
             points.forEach((point) => {
                 const marker = new Marker({
                     lat: point.location.latitude,
@@ -119,13 +119,13 @@ function Map(props: MapProps) {
                 });
 
                 marker.setIcon(
-                    selectedPoint !== undefined && point.title === selectedPoint.title
-                    ? currentCustomIcon
-                    : defaultCustomIcon
+                    selectedPoint !== undefined && point.id === selectedPoint.id
+                        ? currentCustomIcon
+                        : defaultCustomIcon
                 ).addTo(map);
             });
         }
-    },[map, points, selectedPoint]);
+    }, [map, points, selectedPoint]);
 
     return <div className="wrap__map" ref={mapRef}></div>
 }

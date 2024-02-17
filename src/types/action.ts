@@ -40,4 +40,12 @@ export type GetOffersOnCity = {
   }
 }
 
+export type UserInfo = {
+  id: number,
+  email: string,
+  name: string,
+  avatar_url: string,
+  is_pro: boolean,
+}
+
 export type Actions = ClickToFavoriteAction | InitialisationState | SetActiveCard | SetCity | GetOffersOnCity;

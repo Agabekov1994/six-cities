@@ -1,6 +1,6 @@
-import { InitState, State } from "../types/state";
+import { InitState, Offer, State } from "../types/state";
 import { createReducer } from "@reduxjs/toolkit";
-import { loadOffers, requireAuthorization, setActiveCard, setCity, setError, setFavoriteCard, setOffersDataLoadingStatus, sortOffers } from "./action";
+import { loadOffers, requireAuthorization, setActiveCard, setCity, setError, setFavoriteCard, setOffersDataLoadingStatus, setUser, sortOffers } from "./action";
 import { AuthorizationStatus } from "../components/const";
 
 // const initialState: InitState = {
@@ -210,7 +210,10 @@ const initialState: InitState = {
   authorizationStatus: AuthorizationStatus.Unknow,
   error: null,
   isOffersDataLoading: false,
+  user: null,
 }
+
+let defaultOffers: Offer[] = [];
 
 const getIndexFromMockArray = (state: State, id: number): number => state.offers.findIndex((offer) => offer.id === id);
 
@@ -220,15 +223,17 @@ const reducer = createReducer(initialState, (builder) => {
       state.offers[getIndexFromMockArray(state, action.payload.id)] = { ...state.offers[getIndexFromMockArray(state, action.payload.id)], is_active: action.payload.isActive }
     })
     .addCase(setCity, (state, action) => {
-      state.city.name = action.payload.city;
+      const newCity = state.offers.find((offer) => offer.city.name === action.payload.city);
+      state.city = newCity?.city || initialState.city;
     })
     .addCase(setFavoriteCard, (state, action) => {
       state.offers[getIndexFromMockArray(state, action.payload.id)] = { ...state.offers[getIndexFromMockArray(state, action.payload.id)], is_favorite: action.payload.isFavorite }
     })
     .addCase(sortOffers, (state, action) => {
-      state.offers = action.payload.sortHandler([...state.offers]);
+      state.offers = action.payload.sortHandler([...defaultOffers]);
     })
     .addCase(loadOffers, (state, action) => {
+      defaultOffers = [...action.payload];
       state.offers = action.payload;
     })
     .addCase(requireAuthorization, (state, action) => {
@@ -239,6 +244,9 @@ const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(setOffersDataLoadingStatus, (state, action) => {
       state.isOffersDataLoading = action.payload;
+    })
+    .addCase(setUser, (state, action) => {
+      state.user = action.payload;
     })
 })
 

@@ -1,18 +1,26 @@
 import { AuthorizationStatus } from "../components/const"
 import { store } from "../store"
+import { UserInfo } from "./action"
+
+export type City = {
+  location: {
+    latitude: number,
+    longitude: number,
+    zoom: number
+  },
+  name: string
+}
+
+export type User = {
+  login: string,
+  avatar: string,
+}
 
 export type Offer = {
   id_card: number,
   is_active: boolean,
   bedrooms: number,
-  city: {
-    location: {
-      latitude: number,
-      longitude: number,
-      zoom: number
-    },
-    name: string
-  },
+  city: City,
   description: string,
   goods: string[],
   host: {
@@ -51,6 +59,7 @@ export type InitState = {
   authorizationStatus: AuthorizationStatus,
   error: string | null,
   isOffersDataLoading: boolean,
+  user: UserInfo | null
 }
 
 export type State = ReturnType<typeof store.getState>;

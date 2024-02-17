@@ -13,12 +13,12 @@ type City = {
 function useMap(mapRef: MutableRefObject<HTMLElement | null>, city: City): Map | null {
     const [map, setMap] = useState<Map | null>(null);
 
-    let instance:Map;
+    let instance: Map;
 
     useEffect(() => {
         if (mapRef.current !== null && map === null) {
 
-            if(instance) {
+            if (instance) {
                 instance.off();
                 instance.remove();
             }

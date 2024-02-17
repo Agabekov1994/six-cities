@@ -9,6 +9,8 @@ import Property from "../property/property";
 import PrivateRoute from "../private-route/private-route";
 import { useAppSelector } from "../../hooks";
 import LoadingScreen from "../../pages/loading-screen";
+import HistoryRouter from "../history-route/history-route";
+import browserHistory from "../../browser-history";
 
 function App(): JSX.Element {
   const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
@@ -19,7 +21,7 @@ function App(): JSX.Element {
   }
 
   return <React.Fragment>
-    <BrowserRouter>
+    <HistoryRouter history={browserHistory}>
       <Routes>
         <Route path={AppRoute.Main} element={<Main />} />
 
@@ -35,7 +37,7 @@ function App(): JSX.Element {
 
         <Route path='*' element={<ErrorRoute />} />
       </Routes>
-    </BrowserRouter>
+    </HistoryRouter>
 
   </React.Fragment>
 }
