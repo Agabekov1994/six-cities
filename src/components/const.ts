@@ -4,7 +4,8 @@ export enum AppRoute {
   Main = '/',
   SignIn = '/login',
   Favorites = '/favorites',
-  Room = '/offer/:id'
+  Room = '/offer/:id',
+  Error = '/error'
 }
 
 export enum AuthorizationStatus {
@@ -24,8 +25,12 @@ export enum Cities {
 
 export enum APIRoute {
   Offers = '/hotels',
+  Offer = '/hotels/',
+  Comments = '/comments/',
   Login = '/login',
   Logout = '/logout',
+  Nearby = '/hotels/:id/nearby',
+  Favorite = '/favorite'
 }
 
 export const sortTypes = [

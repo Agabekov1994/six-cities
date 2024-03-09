@@ -36,6 +36,7 @@ function App(): JSX.Element {
         <Route path={AppRoute.Room} element={<Property />} />
 
         <Route path='*' element={<ErrorRoute />} />
+        <Route path={AppRoute.Error} element={<ErrorRoute />} />
       </Routes>
     </HistoryRouter>
 

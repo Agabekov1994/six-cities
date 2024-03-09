@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { mockComments } from "../../mocks/reviews";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import Header from "../header/header";
 import ErrorRoute from "../error-route/error-route";
@@ -8,14 +7,26 @@ import Map from "../map/map";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import CardOffer from "../card-offer/card-offer";
 import { setFavoriteCard } from "../../store/action";
+import LoadingScreen from "../../pages/loading-screen";
+import { fetchOfferOnId, postComment, setStatusOffer } from "../../store/api-actions";
+import NearPlacesCard from "./near-places-card";
 
 function Property() {
-  const { id } = useParams();
-
   const dispatch = useAppDispatch();
-  const {offers, city} = useAppSelector((state) => state);
-  const offer = offers.filter((offer) => offer.id === Number(id))[0];
-  const offersNeigh = offers.filter((offerItem) => offerItem.city.name === offer.city.name);
+  const { id } = useParams();
+  const { offers, authorizationStatus, isOffersDataLoading, room } = useAppSelector((state) => state);
+  const offer = room.offer;
+  const commentsOnRoom = room.comments;
+  const offersNeigh = room.neighOffers;
+  // const offersNeigh = offers.filter((offerItem) => offerItem.city.name === offer?.city.name);
+
+  if (!id) {
+    return <ErrorRoute />
+  }
+
+  if (!offer || offer.id !== Number(id)) {
+    dispatch(fetchOfferOnId(id));
+  }
 
   const [reviewForm, setReviewForm] = useState({
     comment: "",
@@ -23,11 +34,17 @@ function Property() {
   });
 
   useEffect(() => {
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   }, [id]);
 
+
+
+  if (authorizationStatus === AuthorizationStatus.Unknow || isOffersDataLoading) {
+    return <LoadingScreen />
+  }
+
   if (!offer) {
-    return <ErrorRoute />
+    return <LoadingScreen />
   }
 
   return <React.Fragment>
@@ -58,7 +75,7 @@ function Property() {
                   {offer.title}
                 </h1>
                 <button onClick={() => {
-                  dispatch(setFavoriteCard({id: offer.id, isFavorite: !offer.is_favorite}));
+                  dispatch(setStatusOffer({ id: offer.id, status: !offer.is_favorite }));
                 }} className={"property__bookmark-button button" + (offer.is_favorite ? " property__bookmark-button--active" : "")} type="button">
                   <svg className="property__bookmark-icon" width="31" height="33">
                     <use xlinkHref="#icon-bookmark"></use>
@@ -68,7 +85,7 @@ function Property() {
               </div>
               <div className="property__rating rating">
                 <div className="property__stars rating__stars">
-                  <span style={{ width: (offer.rating / 5 * 100)+"%" }}></span>
+                  <span style={{ width: (offer.rating / 5 * 100) + "%" }}></span>
                   <span className="visually-hidden">Rating</span>
                 </div>
                 <span className="property__rating-value rating__value">{offer.rating}</span>
@@ -116,11 +133,11 @@ function Property() {
                 </div>
               </div>
 
-              {mockComments.length ?
+              {commentsOnRoom.length ?
                 <section className="property__reviews reviews">
-                  <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{mockComments.length}</span></h2>
+                  <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{commentsOnRoom.length}</span></h2>
                   <ul className="reviews__list">
-                    {mockComments.map((comment) => <li className="reviews__item">
+                    {commentsOnRoom.map((comment) => <li className="reviews__item">
                       <div className="reviews__user user">
                         <div className="reviews__avatar-wrapper user__avatar-wrapper">
                           <img className="reviews__avatar user__avatar" src={comment.user.avatar_url} width="54" height="54" alt="Reviews avatar" />
@@ -144,7 +161,10 @@ function Property() {
                     </li>)}
                   </ul>
 
-                  {AuthorizationStatus.Auth === AuthorizationStatus.Auth ? <form className="reviews__form form" action="#" method="post">
+                  {authorizationStatus === AuthorizationStatus.Auth ? <form className="reviews__form form" onSubmit={(evt) => {
+                    evt.preventDefault();
+                    dispatch(postComment({ id, ...reviewForm }));
+                  }}>
                     <label className="reviews__label form__label" htmlFor="review">Your review</label>
                     <div className="reviews__rating-form form__rating" onChange={(evt) => {
                       setReviewForm({ ...reviewForm, rating: Number((evt.target as HTMLInputElement).value) });
@@ -191,7 +211,7 @@ function Property() {
                       <p className="reviews__help">
                         To submit review please make sure to set <span className="reviews__star">rating</span> and describe your stay with at least <b className="reviews__text-amount">50 characters</b>.
                       </p>
-                      <button className="reviews__submit form__submit button" type="submit" disabled>Submit</button>
+                      <button className="reviews__submit form__submit button" type="submit">Submit</button>
                     </div>
                   </form> : null}
 
@@ -201,7 +221,7 @@ function Property() {
           </div>
 
           <section className="property__map map">
-            <Map city={offer.city} points={offersNeigh} selectedPoint={offersNeigh.filter((offer) => offer.is_active === true)[0]} />
+            <Map key={offer.city.name} city={offer.city} points={offersNeigh} selectedPoint={offersNeigh.filter((offer) => offer.is_active === true)[0]} />
           </section>
 
         </section>
@@ -210,8 +230,8 @@ function Property() {
             <h2 className="near-places__title">Other places in the neighbourhood</h2>
             <div className="near-places__list places__list">
 
-              {offersNeigh.map((offer, index) => <CardOffer offer={offer} id={offer.id} />)}
-              
+              {offersNeigh.map((offer, index) => <NearPlacesCard key={index + offer.title} offer={offer} id={offer.id} />)}
+
             </div>
           </section>
         </div>

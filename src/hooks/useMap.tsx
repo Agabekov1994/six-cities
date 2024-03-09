@@ -28,7 +28,7 @@ function useMap(mapRef: MutableRefObject<HTMLElement | null>, city: City): Map |
                     lat: city.location.latitude,
                     lng: city.location.longitude
                 },
-                zoom: 10
+                zoom: 12
             });
 
             const layer = new TileLayer(

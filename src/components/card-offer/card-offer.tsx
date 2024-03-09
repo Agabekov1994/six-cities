@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { setActiveCard } from "../../store/action";
-import { useAppDispatch} from "../../hooks";
+import { useAppDispatch } from "../../hooks";
 
 type props = {
   offer: {
@@ -38,23 +38,23 @@ type props = {
     title: string,
     type: string
   },
-  id:number,
+  id: number,
 }
 
 function CardOffer(props: props) {
-  const {offer, id} = props;
+  const { offer, id } = props;
 
   const dispatch = useAppDispatch();
 
   return <React.Fragment>
-    <article className="cities__place-card place-card" 
-    onMouseEnter={() => {
-      dispatch(setActiveCard({id: id, isActive: true}));
-    }}
-    
-    onMouseLeave={() => {
-      dispatch(setActiveCard({id: id, isActive: false}));
-    }}>
+    <article className="cities__place-card place-card"
+      onMouseEnter={() => {
+        dispatch(setActiveCard({ id: id, isActive: true, isNeigh: false }));
+      }}
+
+      onMouseLeave={() => {
+        dispatch(setActiveCard({ id: id, isActive: false, isNeigh: false }));
+      }}>
       <div className="place-card__mark">
         <span>{offer.city.name}</span>
       </div>
@@ -78,12 +78,12 @@ function CardOffer(props: props) {
         </div>
         <div className="place-card__rating rating">
           <div className="place-card__stars rating__stars">
-            <span style={{ width: (offer.rating / 5 * 100)+"%" }}></span>
+            <span style={{ width: (offer.rating / 5 * 100) + "%" }}></span>
             <span className="visually-hidden">Rating</span>
           </div>
         </div>
         <h2 className="place-card__name">
-          <Link to={"/offer/"+offer.id}>{offer.title}</Link>
+          <Link to={"/offer/" + offer.id}>{offer.title}</Link>
         </h2>
         <p className="place-card__type">{offer.type}</p>
       </div>
