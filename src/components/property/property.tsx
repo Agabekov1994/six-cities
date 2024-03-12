@@ -10,15 +10,18 @@ import { setFavoriteCard } from "../../store/action";
 import LoadingScreen from "../../pages/loading-screen";
 import { fetchOfferOnId, postComment, setStatusOffer } from "../../store/api-actions";
 import NearPlacesCard from "./near-places-card";
+import { getAuthorizationStatus } from "../../store/user-process/selectors";
+import { getLoadingStatus, getRoom } from "../../store/data-process/selectors";
 
 function Property() {
   const dispatch = useAppDispatch();
   const { id } = useParams();
-  const { offers, authorizationStatus, isOffersDataLoading, room } = useAppSelector((state) => state);
+  const room = useAppSelector(getRoom);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const isOffersDataLoading = useAppSelector(getLoadingStatus);
   const offer = room.offer;
   const commentsOnRoom = room.comments;
   const offersNeigh = room.neighOffers;
-  // const offersNeigh = offers.filter((offerItem) => offerItem.city.name === offer?.city.name);
 
   if (!id) {
     return <ErrorRoute />
@@ -59,8 +62,8 @@ function Property() {
         <section className="property">
           <div className="property__gallery-container container">
             <div className="property__gallery">
-              {offer.images.map((img) =>
-                <div className="property__image-wrapper">
+              {offer.images.map((img, index) =>
+                <div key={index} className="property__image-wrapper">
                   <img className="property__image" src={img} alt="Photo studio" />
                 </div>)}
             </div>
@@ -137,7 +140,7 @@ function Property() {
                 <section className="property__reviews reviews">
                   <h2 className="reviews__title">Reviews &middot; <span className="reviews__amount">{commentsOnRoom.length}</span></h2>
                   <ul className="reviews__list">
-                    {commentsOnRoom.map((comment) => <li className="reviews__item">
+                    {commentsOnRoom.map((comment, index) => <li key={index} className="reviews__item">
                       <div className="reviews__user user">
                         <div className="reviews__avatar-wrapper user__avatar-wrapper">
                           <img className="reviews__avatar user__avatar" src={comment.user.avatar_url} width="54" height="54" alt="Reviews avatar" />

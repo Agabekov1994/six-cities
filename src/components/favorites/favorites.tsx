@@ -2,9 +2,10 @@ import React from "react";
 import CardOffer from "../card-offer/card-offer";
 import Header from "../header/header";
 import { useAppSelector } from "../../hooks";
+import { getOffers } from "../../store/data-process/selectors";
 
 function Favorites() {
-  const { offers } = useAppSelector((state) => state);
+  const offers = useAppSelector(getOffers);
   const favoriteOffers = offers.filter((offer) => offer.is_favorite == true);
   const cities = new Array();
   favoriteOffers.forEach((offer) => !cities.includes(offer.city.name) ? cities.push(offer.city.name) : null);
@@ -34,7 +35,7 @@ function Favorites() {
                   </div>
                   <div className="favorites__places">
 
-                    {favoriteOffers.filter((offer) => offer.city.name == city).map((offer, index) => <CardOffer key={index} offer={offer} id={index}/>)}
+                    {favoriteOffers.filter((offer) => offer.city.name == city).map((offer, index) => <CardOffer key={index} offer={offer} id={index} />)}
 
                   </div>
                 </li>

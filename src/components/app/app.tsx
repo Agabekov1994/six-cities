@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import Main from "../main/main";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AppRoute, AuthorizationStatus } from "../const";
+import { Routes, Route } from "react-router-dom";
+import { AppRoute, NameSpace } from "../const";
 import ErrorRoute from "../error-route/error-route";
 import Login from "../login/login";
 import Favorites from "../favorites/favorites";
@@ -11,12 +11,15 @@ import { useAppSelector } from "../../hooks";
 import LoadingScreen from "../../pages/loading-screen";
 import HistoryRouter from "../history-route/history-route";
 import browserHistory from "../../browser-history";
+import { getAuthCheckedStatus, getAuthorizationStatus } from "../../store/user-process/selectors";
+import { getLoadingStatus } from "../../store/data-process/selectors";
 
 function App(): JSX.Element {
-  const authorizationStatus = useAppSelector((state) => state.authorizationStatus);
-  const isOffersDataLoading = useAppSelector((state) => state.isOffersDataLoading);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const isAuthChecked = useAppSelector(getAuthCheckedStatus);
+  const isOffersDataLoading = useAppSelector(getLoadingStatus);
 
-  if (authorizationStatus === AuthorizationStatus.Unknow || isOffersDataLoading) {
+  if (!isAuthChecked || isOffersDataLoading) {
     return <LoadingScreen />
   }
 

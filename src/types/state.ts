@@ -56,15 +56,16 @@ export type InitState = {
     name: string
   },
   offers: Offer[],
-  authorizationStatus: AuthorizationStatus,
   error: string | null,
   isOffersDataLoading: boolean,
   user: UserInfo | null,
-  room: {
-    offer: Offer | null,
-    comments: Comment[] | [],
-    neighOffers: Offer[] | []
-  }
+  room: Room
+}
+
+export type Room = {
+  offer: Offer | null,
+  comments: Comment[] | [],
+  neighOffers: Offer[] | []
 }
 
 export type Comment = {
@@ -84,3 +85,32 @@ export type State = ReturnType<typeof store.getState>;
 
 export type AppDispatch = typeof store.dispatch;
 
+export type UserProcess = {
+  authorizationStatus: AuthorizationStatus;
+  user: UserInfo | null,
+}
+
+export type DataProcess = {
+  city: {
+    location: {
+      latitude: number,
+      longitude: number,
+      zoom: number
+    },
+    name: string
+  },
+  offers: Offer[],
+  error: string | null,
+  isOffersDataLoading: boolean,
+  room: {
+    offer: Offer | null,
+    comments: Comment[] | [],
+    neighOffers: Offer[] | []
+  }
+}
+
+export type DataResposeProperty = {
+  offer: Offer,
+  comments: Comment[],
+  neighOffers: Offer[]
+}

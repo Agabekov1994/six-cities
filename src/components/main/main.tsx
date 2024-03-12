@@ -6,11 +6,13 @@ import Filter from "../filter/filter";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setCity } from "../../store/action";
 import SortBlock from "../sort-block/sort-block";
+import { getCity, getOffers } from "../../store/data-process/selectors";
 
 
 
 function Main() {
-  const { offers, city } = useAppSelector((state) => state);
+  const offers = useAppSelector(getOffers);
+  const city = useAppSelector(getCity);
 
   const filteredOffers = offers.filter((offer) => offer.city.name === city.name);
 

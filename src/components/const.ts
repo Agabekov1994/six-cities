@@ -8,6 +8,11 @@ export enum AppRoute {
   Error = '/error'
 }
 
+export enum NameSpace {
+  User = 'USER',
+  Data = 'DATA',
+}
+
 export enum AuthorizationStatus {
   Auth = 'AUTH',
   NoAuth = 'NO_AUTH',

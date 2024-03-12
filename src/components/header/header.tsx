@@ -3,9 +3,12 @@ import { Link } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { AppRoute, AuthorizationStatus } from "../const";
 import { logoutAction } from "../../store/api-actions";
+import { getUser } from "../../store/data-process/selectors";
+import { getAuthorizationStatus } from "../../store/user-process/selectors";
 
 function Header() {
-  const { authorizationStatus, user } = useAppSelector((state) => state);
+  const authorizationStatus = useAppSelector(getAuthorizationStatus);
+  const user = useAppSelector(getUser);
   const dispatch = useAppDispatch();
 
   return <React.Fragment>

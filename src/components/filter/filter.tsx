@@ -1,12 +1,13 @@
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setCity } from "../../store/action";
+import { getCity } from "../../store/data-process/selectors";
 import { Cities } from "../const"
 import { Link } from "react-router-dom";
 
 const cities = Object.values(Cities);
 
 function Filter() {
-  const { city } = useAppSelector((state) => state);
+  const city = useAppSelector(getCity);
   const dispatch = useAppDispatch();
 
   return <div className="tabs">
