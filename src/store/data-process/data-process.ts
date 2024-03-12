@@ -37,8 +37,6 @@ export const dataProcess = createSlice({
             }
         },
         setCity: (state, action) => {
-            console.log('setCity');
-            console.log('action.payload' + action.payload);
             const newCity = state.offers.find((offer) => offer.city.name === action.payload.city);
             state.city = newCity?.city || initialState.city;
         },
